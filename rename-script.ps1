@@ -19,7 +19,7 @@ Param(
     [string]$path
 )
 
-$Version = "0.1.0"
+$Version = "0.1.1"
 
 # If there is an error fail fast
 $ErrorActionPreference = "Stop"
@@ -38,7 +38,7 @@ Write-Host "Processing path '$root'"
 # Make Sure we only have one XML file
 $xmlFiles = @(Get-ChildItem -Path $root *.xml)
 if ($xmlFiles.Length -ne 1) {
-    throw "One XML file required, found: " + $xmlFiles.Length
+    throw ("One XML file required, found: {0}" -f $xmlFiles.Length)
 }
 $xmlFile = $xmlFiles[0]
 
@@ -95,6 +95,10 @@ Foreach ($row in $rows) {
     Write-Host (
         "Successfully renamed '{0}' to '{1}'" -f $source, $destination
     ) -ForegroundColor Green
+}
+
+if ($assets.Length -lt 1) {
+    throw "Will not attempt to create ZIP with no video assets!"
 }
 
 # Create a ZIP file with all the assets we found and the XML file
